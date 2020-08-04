@@ -28,6 +28,20 @@ let persons = [
 
 ]
 
+app.get('/', (req, res) => {
+    res.send(`<h1>Hello world!</h1>`)
+})
+
+// get info
+app.get('/info', (req, res) => {
+    let date = new Date().toDateString()
+    let time = new Date().toTimeString()
+    res.send(
+        `<div>Phonebook has info for ${persons.length} people<br/>
+        ${date} ${time}</div>`)
+})
+
+// get all
 app.get('/api/persons', (req, res) => {
     res.json(persons)
 })
