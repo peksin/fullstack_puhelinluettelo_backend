@@ -1,8 +1,10 @@
 const express = require('express')
 const {response} = require('express')
+const morgan = require('morgan')
 const app = express()
 
 app.use(express.json())
+app.use(morgan('tiny'))
 
 let persons = [
     {
@@ -98,6 +100,7 @@ app.post('/api/persons', (req, res) => {
     }
 
     if (persons.filter(person => person.name === body.name).length !== 0) {
+        // 409 conflict
         return res.status(409).json({
             error: 'name already in phonebook'
         })
