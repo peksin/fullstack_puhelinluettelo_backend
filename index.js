@@ -34,8 +34,9 @@ app.get('/', (req, res) => {
 
 // get info
 app.get('/info', (req, res) => {
-    let date = new Date().toDateString()
-    let time = new Date().toTimeString()
+    let dateAndTime = new Date()
+    let date = dateAndTime.toDateString()
+    let time = dateAndTime.toTimeString()
     res.send(
         `<div>Phonebook has info for ${persons.length} people<br/>
         ${date} ${time}</div>`)
