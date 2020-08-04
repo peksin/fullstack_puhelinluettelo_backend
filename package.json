@@ -1,0 +1,27 @@
+{
+  "name": "fullstack_2020_osa3_puhelinluettelo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/peksin/fullstack_2020_osa3_puhelinluettelo.git"
+  },
+  "author": "Pekka Sinkkonen",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/peksin/fullstack_2020_osa3_puhelinluettelo/issues"
+  },
+  "homepage": "https://github.com/peksin/fullstack_2020_osa3_puhelinluettelo#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  }
+}
