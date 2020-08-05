@@ -4,6 +4,7 @@ const morgan = require('morgan')
 const cors = require('cors')
 const app = express()
 
+// middlewaret kayttoon
 app.use(cors())
 app.use(express.json())
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :type'))
@@ -11,6 +12,10 @@ app.use(express.static('build'))
 
 
 morgan.token('type', (req, res) => JSON.stringify(req.body))
+
+const unknownEndpoint = (req, res) => {
+    res.status(404).send({error: 'unknown endpoint'})
+}
 
 let persons = [
     {
@@ -44,6 +49,9 @@ const generateId = (min, max) => {
     return Math.floor(Math.random() * (max - min)) + min
 }
 
+/*
+ * Routet tanne
+ */
 
 // get info
 app.get('/', (req, res) => {
@@ -117,6 +125,10 @@ app.post('/api/persons', (req, res) => {
     res.json(person)
 })
 
+// ei mennyt millekaan routelle hoitoon =>
+app.use(unknownEndpoint)
+
+// palvelin kayntiin
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
     console.log(`Server running on ${PORT}`)
