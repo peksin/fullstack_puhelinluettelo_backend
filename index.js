@@ -85,11 +85,6 @@ app.delete('/api/persons/:id', (req, res) => {
     res.status(204).end()
 })
 
-const PORT = 3001
-app.listen(PORT, () => {
-    console.log(`Server running on ${PORT}`)
-})
-
 // create one contact
 app.post('/api/persons', (req, res) => {
 
@@ -119,4 +114,9 @@ app.post('/api/persons', (req, res) => {
 
     persons = persons.concat(person)
     res.json(person)
+})
+
+const PORT = process.env.PORT || 3001
+app.listen(PORT, () => {
+    console.log(`Server running on ${PORT}`)
 })
