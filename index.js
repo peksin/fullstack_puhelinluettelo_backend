@@ -5,7 +5,7 @@ const morgan = require('morgan')
 const cors = require('cors')
 const app = express()
 const Person = require('./models/person')
-const note = require('../notes_backend/models/note')
+
 
 // middlewaret kayttoon
 app.use(cors())
@@ -67,9 +67,13 @@ app.get('/info', (req, res) => {
     let dateAndTime = new Date()
     let date = dateAndTime.toDateString()
     let time = dateAndTime.toTimeString()
-    res.send(
-        `<div>Phonebook has info for ${persons.length} people<br/>
-        ${date} ${time}</div>`)
+    Person.find({}).then(persons => {
+        res.send(
+            `<div>Phonebook has info for ${persons.length} people<br/>
+            ${date} ${time}</div>`)
+    })
+
+
 })
 
 // get all
@@ -131,6 +135,24 @@ app.post('/api/persons', (req, res) => {
     person.save().then(savedPerson => {
         res.json(savedPerson)
     })
+})
+
+// update one note
+app.put('/api/persons/:id', (req, res, next) => {
+    const body = req.body
+
+    const person = {
+        name: body.name,
+        number: body.number,
+    }
+
+    // new: true oltava etta parametri updatedPerson on muutoksen
+    // JALKEINEN versio
+    Person.findByIdAndUpdate(req.params.id, person, {new: true})
+        .then(updatedPerson => {
+            res.json(updatedPerson)
+        })
+        .catch(error => next(error))
 })
 
 // ei mennyt millekaan routelle hoitoon =>
