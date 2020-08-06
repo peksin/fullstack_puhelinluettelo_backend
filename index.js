@@ -5,6 +5,7 @@ const morgan = require('morgan')
 const cors = require('cors')
 const app = express()
 const Person = require('./models/person')
+const note = require('../notes_backend/models/note')
 
 // middlewaret kayttoon
 app.use(cors())
@@ -79,25 +80,27 @@ app.get('/api/persons', (req, res) => {
 })
 
 // get one contact
-app.get('/api/persons/:id', (req, res) => {
-    const id = Number(req.params.id)
-    const person = persons.find(person => person.id === id)
-
-    if (person) {
-        res.json(person)
-    } else {
-        res.status(404).end()
-    }
+app.get('/api/persons/:id', (req, res, next) => {
+    Person.findById(req.params.id)
+        .then(person => {
+            if (person) {
+                res.json(person)
+            } else {
+                res.status(404).end()
+            }
+        })
+        .catch(error => next(error))
 })
 
 // delete one contact
-app.delete('/api/persons/:id', (req, res) => {
-    const id = Number(req.params.id)
-    console.log(`${id}`)
-    persons = persons.filter(person => person.id !== id)
-
-    res.status(204).end()
+app.delete('/api/persons/:id', (req, res, next) => {
+    Person.findByIdAndDelete(req.params.id)
+        .then(result => {
+            res.status(204).end()
+        })
+        .catch(error => next(error))
 })
+
 
 // create one contact
 app.post('/api/persons', (req, res) => {
@@ -132,6 +135,19 @@ app.post('/api/persons', (req, res) => {
 
 // ei mennyt millekaan routelle hoitoon =>
 app.use(unknownEndpoint)
+
+// virheiden kasittelija
+const errorHandler = (error, req, res, next) => {
+    console.error(error.message)
+
+    if (error.name === 'CastError') {
+        return res.status(400).send({error: 'malformatted id'})
+    }
+
+    next(error)
+}
+
+app.use(errorHandler)
 
 // palvelin kayntiin
 const PORT = process.env.PORT
