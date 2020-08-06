@@ -50,12 +50,13 @@ const generateId = (min, max) => {
 
     return Math.floor(Math.random() * (max - min)) + min
 }
-
+//////////////////////
 /*
  * Routet tanne
  */
+///////////////////////
 
-// get info
+// get hello world
 app.get('/', (req, res) => {
     res.send(`<h1>Hello world!</h1>`)
 })
@@ -112,21 +113,21 @@ app.post('/api/persons', (req, res) => {
         })
     }
 
-    if (persons.filter(person => person.name === body.name).length !== 0) {
-        // 409 conflict
-        return res.status(409).json({
-            error: 'name already in phonebook'
-        })
-    }
+    // if (persons.filter(person => person.name === body.name).length !== 0) {
+    //     // 409 conflict
+    //     return res.status(409).json({
+    //         error: 'name already in phonebook'
+    //     })
+    // }
 
-    const person = {
+    const person = new Person({
         name: body.name,
         number: body.number,
-        id: generateId(10, 1000),
-    }
+    })
 
-    persons = persons.concat(person)
-    res.json(person)
+    person.save().then(savedPerson => {
+        res.json(savedPerson)
+    })
 })
 
 // ei mennyt millekaan routelle hoitoon =>
