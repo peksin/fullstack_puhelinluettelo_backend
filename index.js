@@ -144,7 +144,7 @@ app.put('/api/persons/:id', (req, res, next) => {
 
     // new: true oltava etta parametri updatedPerson on muutoksen
     // JALKEINEN versio
-    Person.findByIdAndUpdate(req.params.id, person, {new: true})
+    Person.findByIdAndUpdate(req.params.id, person, {new: true, runValidators: true})
         .then(updatedPerson => {
             res.json(updatedPerson)
         })
