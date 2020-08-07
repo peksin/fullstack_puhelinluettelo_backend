@@ -107,23 +107,16 @@ app.delete('/api/persons/:id', (req, res, next) => {
 
 
 // create one contact
-app.post('/api/persons', (req, res) => {
+app.post('/api/persons', (req, res, next) => {
 
     // bodyssa tulee asiakkaan lahettamat tiedot
     const body = req.body
 
-    // jos tyhja nimi tai tyhja numero
-    if (!body.name || !body.number) {
-        // 400 bad request
-        return res.status(400).json({
-            error: 'name or number missing'
-        })
-    }
-
-    // if (persons.filter(person => person.name === body.name).length !== 0) {
-    //     // 409 conflict
-    //     return res.status(409).json({
-    //         error: 'name already in phonebook'
+    // // jos tyhja nimi tai tyhja numero
+    // if (!body.name || !body.number) {
+    //     // 400 bad request
+    //     return res.status(400).json({
+    //         error: 'name or number missing'
     //     })
     // }
 
@@ -132,9 +125,12 @@ app.post('/api/persons', (req, res) => {
         number: body.number,
     })
 
-    person.save().then(savedPerson => {
+    person
+        .save()
+        .then(savedPerson => {
         res.json(savedPerson)
     })
+    .catch(error => next(error))
 })
 
 // update one note
@@ -164,6 +160,8 @@ const errorHandler = (error, req, res, next) => {
 
     if (error.name === 'CastError') {
         return res.status(400).send({error: 'malformatted id'})
+    } else if (error.name === 'ValidationError') {
+        return res.status(400).json({error: error.message})
     }
 
     next(error)
